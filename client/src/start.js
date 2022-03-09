@@ -1,7 +1,18 @@
 import ReactDOM from "react-dom";
+import Welcome from "./welcome.js";
+import Logo from "./logo";
 
-ReactDOM.render(<HelloWorld />, document.querySelector("main"));
-
-function HelloWorld() {
-    return <div>Hello, World!</div>;
-}
+fetch("/users/id.json").then((resp) =>
+    resp
+        .json()
+        .then((data) => {
+            if (data.userId) {
+                ReactDOM.render(<Logo />, document.querySelector("main"));
+            } else {
+                ReactDOM.render(<Welcome />, document.querySelector("main"));
+            }
+        })
+        .catch(() => {
+            console.log("Error fetching cookie");
+        })
+);

@@ -1,3 +1,75 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
+    margin: 0;
     background-color: ghostwhite;
+}
+
+main {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.welcomeContainer {
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.welcome {
+    font-size: 90px;
+}
+
+.registerError {
+    color: red;
+}
+
+.logo {
+    box-sizing: content-box;
+    width: 440px;
+    padding: 45px;
+    height: fit-content;
+    margin-bottom: 50px;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.logosmall {
+    width: 80px;
+}
+
+.registrationForm {
+    display: flex;
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex-direction: column;
+    height: 200px;
+    width: 250px;
+    justify-content: end;
+    align-items: center;
+}
+
+.registerInput {
+    margin-bottom: 10px;
+}
+
+button {
+    width: 60px;
+    margin-bottom: 6px;
+    margin-top: 8px;
+}
+
+.alreadyMember {
+    display: block;
+    width: max-content;
+    margin-top: 8px;
 }
