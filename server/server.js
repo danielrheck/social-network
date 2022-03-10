@@ -3,7 +3,7 @@ const app = express();
 const compression = require("compression");
 const path = require("path");
 // BCRYPT AND DB
-const { compare, hash, addUser } = require("../sql/db");
+const { compare, hash, addUser, getCredentialsByEmail } = require("../sql/db");
 const cookieSession = require("cookie-session");
 const secrets = require("../secrets.json");
 
@@ -47,6 +47,24 @@ app.get("/users/id.json", (req, res) => {
 app.get("/logout", (req, res) => {
     req.session.userId = null;
     res.redirect("/");
+});
+
+app.post("/users/login.json", (req, res) => {
+    getCredentialsByEmail(req.body.email).then(({ rows }) => {
+        if (rows[0]) {
+            compare(req.body.password, rows[0].password).then((check) => {
+                if (check) {
+                    req.session.userId = rows[0].id;
+                    console.log({ success: true });
+                    res.json({ success: true });
+                } else {
+                    // wrong pw
+                    console.log({ success: false });
+                    res.json({ success: false });
+                }
+            });
+        }
+    });
 });
 
 app.get("*", function (req, res) {

@@ -1,31 +1,31 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
 
-export default class Registration extends Component {
+export default class Login extends Component {
     constructor() {
         super();
         this.state = {};
         this.inputUpdate = this.inputUpdate.bind(this);
         this.inputSubmit = this.inputSubmit.bind(this);
     }
-    componentDidMount() {
-        // MOUNTED
-    }
+    componentDidMount() {}
+
     inputUpdate({ target }) {
         this.setState({ [target.name]: target.value });
     }
     inputSubmit(e) {
         e.preventDefault();
-        fetch("/users/register.json", {
-            method: "POST",
+        fetch("/users/login.json", {
             headers: {
                 "Content-Type": "application/json",
             },
+            method: "POST",
             body: JSON.stringify(this.state),
         })
             .then((resp) => resp.json())
             .then((data) => {
                 if (data.success) {
+                    history.pushState(null, null, "/");
                     location.reload();
                 } else {
                     this.setState({ error: true }).then(() => {});
@@ -38,44 +38,26 @@ export default class Registration extends Component {
     render() {
         return (
             <>
-                <h1>Registration</h1>
-                <form className="registrationForm">
-                    {this.state.error && (
-                        <h1 className="registerError">ERROR</h1>
-                    )}
+                {this.state.error && <h1 className="registerError">ERROR</h1>}
+                <form className="loginForm">
                     <input
-                        className="registerInput"
-                        type="text"
-                        name="first"
                         onChange={this.inputUpdate}
-                        placeholder="First Name"
-                    ></input>
-                    <input
-                        className="registerInput"
+                        className="loginInput"
                         type="text"
-                        name="last"
-                        onChange={this.inputUpdate}
-                        placeholder="Last Name"
-                    ></input>
-                    <input
-                        className="registerInput"
-                        type="text"
-                        name="email"
-                        onChange={this.inputUpdate}
                         placeholder="E-Mail"
+                        name="email"
                     ></input>
                     <input
-                        className="registerInput"
-                        type="password"
-                        name="password"
                         onChange={this.inputUpdate}
+                        className="loginInput"
+                        type="password"
                         placeholder="Password"
+                        name="password"
                     ></input>
-                    <button onClick={this.inputSubmit}>Send</button>
-
+                    <button onClick={this.inputSubmit}>Login</button>
                     <div className="alreadyMember">
-                        Already a member? Click <Link to="/login">here</Link> to
-                        log in.
+                        Not a member? Click <Link to="/">here</Link> to
+                        register.
                     </div>
                 </form>
             </>

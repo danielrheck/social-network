@@ -29,15 +29,13 @@ module.exports.addUser = function (firstname, lastname, email, password) {
     );
 };
 
-let addUser = function (firstname, lastname, email, password) {
+module.exports.getCredentialsByEmail = function (email) {
     return db.query(
         `
     
-        INSERT INTO users (firstname, lastname, email, password)
-        VALUES ($1, $2, $3, $4)
-        RETURNING id
-    
+        SELECT * FROM users WHERE email = $1
+
     `,
-        [firstname, lastname, email, password]
+        [email]
     );
 };

@@ -33,9 +33,9 @@ main {
 .logo {
     box-sizing: content-box;
     width: 440px;
-    padding: 45px;
+    padding-top: 45px;
     height: fit-content;
-    margin-bottom: 50px;
+    margin-bottom: 40px;
     -webkit-user-drag: none;
     user-select: none;
     -moz-user-select: none;
@@ -72,4 +72,15 @@ button {
     display: block;
     width: max-content;
     margin-top: 8px;
+}
+
+.loginForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.loginInput {
+    margin-bottom: 8px;
 }
