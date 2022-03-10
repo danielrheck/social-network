@@ -25,7 +25,6 @@ export default class Login extends Component {
             .then((resp) => resp.json())
             .then((data) => {
                 if (data.success) {
-                    history.pushState(null, null, "/");
                     location.reload();
                 } else {
                     this.setState({ error: true }).then(() => {});
@@ -55,6 +54,10 @@ export default class Login extends Component {
                         name="password"
                     ></input>
                     <button onClick={this.inputSubmit}>Login</button>
+                    <div className="alreadyMember">
+                        Forgot you password? Click <Link to="/reset">here</Link>{" "}
+                        to reset it.
+                    </div>
                     <div className="alreadyMember">
                         Not a member? Click <Link to="/">here</Link> to
                         register.

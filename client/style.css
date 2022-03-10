@@ -84,3 +84,18 @@ button {
 .loginInput {
     margin-bottom: 8px;
 }
+
+.resetForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.resetInput {
+    margin-top: 10px;
+}
+
+.sendVerificationButton {
+    width: fit-content;
+}

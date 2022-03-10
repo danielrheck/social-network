@@ -7,6 +7,7 @@ fetch("/users/id.json").then((resp) =>
         .json()
         .then((data) => {
             if (data.userId) {
+                console.log("ALSO TRIGGERS");
                 ReactDOM.render(<Logo />, document.querySelector("main"));
             } else {
                 ReactDOM.render(<Welcome />, document.querySelector("main"));
