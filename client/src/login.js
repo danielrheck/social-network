@@ -1,5 +1,20 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { blueGrey } from "@mui/material/colors";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: blueGrey[500],
+        },
+        secondary: {
+            main: "#64b5f6",
+        },
+    },
+});
 
 export default class Login extends Component {
     constructor() {
@@ -37,32 +52,53 @@ export default class Login extends Component {
     render() {
         return (
             <>
-                {this.state.error && <h1 className="registerError">ERROR</h1>}
-                <form className="loginForm">
-                    <input
-                        onChange={this.inputUpdate}
-                        className="loginInput"
-                        type="text"
-                        placeholder="E-Mail"
-                        name="email"
-                    ></input>
-                    <input
-                        onChange={this.inputUpdate}
-                        className="loginInput"
-                        type="password"
-                        placeholder="Password"
-                        name="password"
-                    ></input>
-                    <button onClick={this.inputSubmit}>Login</button>
-                    <div className="alreadyMember">
-                        Forgot you password? Click <Link to="/reset">here</Link>{" "}
-                        to reset it.
-                    </div>
-                    <div className="alreadyMember">
-                        Not a member? Click <Link to="/">here</Link> to
-                        register.
-                    </div>
-                </form>
+                <div className="loginFormContainer">
+                    <ThemeProvider theme={theme}>
+                        {this.state.error && (
+                            <h1 className="loginError">ERROR</h1>
+                        )}
+                        <form className="loginForm">
+                            <TextField
+                                size="small"
+                                onChange={this.inputUpdate}
+                                className="loginInput"
+                                type="text"
+                                placeholder="E-Mail"
+                                name="email"
+                            ></TextField>
+                            <TextField
+                                sx={{ mt: "15px" }}
+                                size="small"
+                                onChange={this.inputUpdate}
+                                className="loginInput"
+                                type="password"
+                                placeholder="Password"
+                                name="password"
+                            ></TextField>
+                            <Button
+                                sx={{
+                                    width: "90px",
+                                    fontSize: "10px",
+                                    height: "25px",
+                                    mt: "15px",
+                                    mb: "5px",
+                                }}
+                                variant="contained"
+                                onClick={this.inputSubmit}
+                            >
+                                Login
+                            </Button>
+                            <div className="alreadyMember">
+                                Forgot you password? Click{" "}
+                                <Link to="/reset">here</Link> to reset it.
+                            </div>
+                            <div className="alreadyMember">
+                                Not a member? Click <Link to="/">here</Link> to
+                                register.
+                            </div>
+                        </form>
+                    </ThemeProvider>{" "}
+                </div>
             </>
         );
     }

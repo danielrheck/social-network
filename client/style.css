@@ -1,5 +1,6 @@
 * {
     box-sizing: border-box;
+    font-family: "Fredoka", sans-serif;
 }
 
 body {
@@ -26,7 +27,8 @@ main {
     font-size: 90px;
 }
 
-.registerError {
+.registerError,
+.loginError {
     color: red;
 }
 
@@ -71,7 +73,12 @@ button {
 .alreadyMember {
     display: block;
     width: max-content;
-    margin-top: 8px;
+    margin-top: 12px;
+}
+
+.loginFormContainer {
+    position: relative;
+    bottom: 60px;
 }
 
 .loginForm {
@@ -85,6 +92,25 @@ button {
     margin-bottom: 8px;
 }
 
+.loginError {
+    text-align: center;
+}
+
+.resetFormContainer {
+    position: relative;
+    bottom: 100px;
+}
+
+.registerH1 {
+    position: relative;
+    bottom: 55px;
+    font-size: 22px;
+}
+
+.registerError {
+    text-align: center;
+}
+
 .resetForm {
     display: flex;
     flex-direction: column;
@@ -94,6 +120,7 @@ button {
 
 .resetInput {
     margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .sendVerificationButton {

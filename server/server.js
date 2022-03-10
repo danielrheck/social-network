@@ -46,7 +46,6 @@ app.post("/users/register.json", (req, res) => {
 
 app.get("/users/id.json", (req, res) => {
     if (!req.session.userId) {
-        console.log("Trigger");
         res.json({ success: false });
     } else {
         res.json({ userId: req.session.userId });
@@ -78,7 +77,7 @@ app.post("/users/login.json", (req, res) => {
             }
         })
         .catch(() => {
-            // error querying DB
+            // error querying credentials on DB
             res.json({ success: false });
         });
 });
@@ -87,12 +86,12 @@ app.post("/reset/sendCode", (req, res) => {
     getCredentialsByEmail(req.body.email).then(({ rows }) => {
         if (rows[0]) {
             let code = cryptoRandomString({ length: 6 });
-            let msg = `Hello, here it is your reset passsword code:  ${code}`;
+            let msg = `Hello, here it is your reset password code:  ${code}`;
             addResetCode(req.body.email, code)
                 .then(() => {
                     sendEmail(req.body.email, "Your Reset Code!", msg)
                         .then(() => {
-                            res.json({ success: true, email: req.body.email });
+                            res.json({ success: true });
                         })
                         .catch((e) => {
                             console.log("Error sending E-Mail:  ", e);
@@ -111,7 +110,6 @@ app.post("/reset/sendCode", (req, res) => {
 });
 
 app.post("/users/checkCode", (req, res) => {
-    console.log(req.body.email);
     getResetCode(req.body.email).then(({ rows }) => {
         if (rows[0]) {
             if (req.body.code === rows[0].code) {

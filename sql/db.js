@@ -68,21 +68,6 @@ module.exports.getResetCode = function (email) {
     );
 };
 
-let getResetCode = function (email) {
-    return db.query(
-        `
-    
-        SELECT code FROM reset_codes
-        WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes'
-        AND email = $1
-        ORDER BY id DESC 
-        LIMIT 1
-    
-    `,
-        [email]
-    );
-};
-
 module.exports.updatePassword = function (email, password) {
     return db.query(
         `
