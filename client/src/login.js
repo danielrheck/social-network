@@ -65,6 +65,7 @@ export default class Login extends Component {
                                 type="text"
                                 placeholder="E-Mail"
                                 name="email"
+                                key="resetCode"
                             ></TextField>
                             <TextField
                                 sx={{ mt: "15px" }}

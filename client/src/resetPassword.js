@@ -129,7 +129,8 @@ export default class ResetPassword extends Component {
                             className="resetInput"
                             placeholder="New Password"
                             type="password"
-                            value={this.state.newPassword}
+                            key="passwordReset"
+                            // value={this.state.newPassword}
                         ></TextField>
                         <ThemeProvider theme={theme}>
                             <Button

@@ -1,7 +1,10 @@
 const express = require("express");
 const app = express();
+const multer = require("multer");
+const uidSafe = require("uid-safe");
 const compression = require("compression");
 const path = require("path");
+const s3 = require("./aws_s3.js");
 const {
     compare,
     hash,
@@ -10,6 +13,8 @@ const {
     addResetCode,
     getResetCode,
     updatePassword,
+    getDataByUserId,
+    updateImage,
 } = require("../sql/db");
 const { sendEmail } = require("./aws_ses");
 const cookieSession = require("cookie-session");
@@ -28,6 +33,24 @@ app.use(
 );
 
 app.use(express.json());
+
+const diskStorage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, path.join(__dirname, "/uploads/"));
+    },
+    filename: function (req, file, callback) {
+        uidSafe(24).then((uid) => {
+            callback(null, uid + path.extname(file.originalname));
+        });
+    },
+});
+
+const uploader = multer({
+    storage: diskStorage,
+    limits: {
+        fileSize: 2097152,
+    },
+});
 
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
@@ -50,6 +73,16 @@ app.get("/users/id.json", (req, res) => {
     } else {
         res.json({ userId: req.session.userId });
     }
+});
+
+app.get("/user", (req, res) => {
+    getDataByUserId(req.session.userId).then(({ rows }) => {
+        if (rows[0]) {
+            res.json({ success: true, rows: rows });
+        } else {
+            res.json({ success: false });
+        }
+    });
 });
 
 app.get("/logout", (req, res) => {
@@ -106,6 +139,28 @@ app.post("/reset/sendCode", (req, res) => {
             console.log("No such e-mail in the DB.");
             res.json({ success: false });
         }
+    });
+});
+
+app.post("/pic/upload", uploader.single("file"), s3.upload, (req, res) => {
+    // console.log("Gets here!");
+    getDataByUserId(req.session.userId).then(({ rows }) => {
+        updateImage(
+            rows[0].email,
+            `https://${secrets.AWS_BUCKET_NAME}.s3.amazonaws.com/${req.file.filename}`
+        )
+            .then(({ rows }) => {
+                res.json({
+                    success: true,
+                    profilePic: rows[0].profile_pic,
+                    first: rows[0].firstname,
+                    last: rows[0].lastname,
+                    email: rows[0].emailname,
+                });
+            })
+            .catch((e) => {
+                console.log(e);
+            });
     });
 });
 

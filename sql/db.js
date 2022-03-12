@@ -29,6 +29,20 @@ module.exports.addUser = function (firstname, lastname, email, password) {
     );
 };
 
+module.exports.updateImage = function (email, picURL) {
+    return db.query(
+        `
+    
+        UPDATE users 
+        SET profile_pic = $2
+        WHERE email =  $1
+        RETURNING *
+    
+    `,
+        [email, picURL]
+    );
+};
+
 module.exports.getCredentialsByEmail = function (email) {
     return db.query(
         `
@@ -37,6 +51,17 @@ module.exports.getCredentialsByEmail = function (email) {
 
     `,
         [email]
+    );
+};
+
+module.exports.getDataByUserId = function (user_id) {
+    return db.query(
+        `
+    
+        SELECT * FROM users WHERE id = $1
+
+    `,
+        [user_id]
     );
 };
 
