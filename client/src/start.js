@@ -7,6 +7,7 @@ fetch("/users/id.json").then((resp) =>
         .json()
         .then((data) => {
             if (data.userId) {
+                history.pushState(null, null, "/");
                 ReactDOM.render(<App />, document.querySelector("main"));
             } else {
                 ReactDOM.render(<Welcome />, document.querySelector("main"));

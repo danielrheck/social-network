@@ -15,6 +15,7 @@ const {
     updatePassword,
     getDataByUserId,
     updateImage,
+    updateBio,
 } = require("../sql/db");
 const { sendEmail } = require("./aws_ses");
 const cookieSession = require("cookie-session");
@@ -140,6 +141,18 @@ app.post("/reset/sendCode", (req, res) => {
             res.json({ success: false });
         }
     });
+});
+
+app.post("/bio/update", (req, res) => {
+    console.log(req.session.userId, req.body.newBio);
+    updateBio(req.session.userId, req.body.newBio)
+        .then(() => {
+            res.json({ success: true });
+        })
+        .catch((e) => {
+            console.log("Error updating bio:  ", e);
+            res.json({ success: false });
+        });
 });
 
 app.post("/pic/upload", uploader.single("file"), s3.upload, (req, res) => {

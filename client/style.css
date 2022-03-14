@@ -5,7 +5,7 @@
 
 body {
     margin: 0;
-    background-color: ghostwhite;
+    background-color: rgb(235, 235, 245);
 }
 
 main {
@@ -56,26 +56,120 @@ main {
     min-width: 100vw;
 }
 
-.logo {
+.appHeaderContainer {
+    display: flex;
+    justify-content: center;
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 90px;
-    height: 60px;
-    margin-top: 25px;
-    margin-left: 40px;
+    top: 0px;
+    width: 100vw;
+    height: 90px;
+    background-color: rgb(242, 250, 255);
 }
 
-.picContainer {
+.appHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    height: 90px;
+    width: 92vw;
+}
+
+.logoutButton {
+    position: absolute;
+    top: 100px;
+    right: 20px;
+}
+
+.logo {
+    width: 100px;
+    height: 55px;
+}
+
+.profileContainer {
+    background-color: rgb(224, 235, 245);
+    display: flex;
+    height: 240px;
+    width: 650px;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 2%;
+    padding: 15px;
+    border: 1px solid black;
+}
+
+.editIcon {
+    width: 15px;
+    cursor: pointer;
+}
+
+.bioInput {
+    position: relative;
+    top: 20px;
+    font-size: 12px;
+    padding: 5px;
+}
+
+.bioText {
+    height: 134px;
+    width: 315px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    padding: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: rgb(242, 250, 255);
+}
+
+.editAddInputAndButton {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.profilePic {
-    width: 180px;
-    height: 160px;
+.editAddButton {
+    position: relative;
+    top: 20px;
+}
+
+/* .bioTextInput {
+    position: relative;
+    right: 160px;
+} */
+
+.profilePicContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: fit-content;
+    width: fit-content;
+    background-color: aliceblue;
+    border: 1px solid rgba(0, 0, 0, 0.678);
+    border-radius: 5%;
+    padding-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+}
+
+.profilePicSmall {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.helloUser {
+    position: relative;
+    top: 5px;
+}
+
+.profilePicBig {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
 }
 
 .uploaderContainer {
@@ -116,19 +210,29 @@ main {
     cursor: pointer;
 }
 
+.resetFormContainer,
+.loginFormContainer,
 .registrationForm {
     display: flex;
     flex-shrink: 0;
     flex-grow: 0;
     flex-direction: column;
-    height: 200px;
-    width: 250px;
+    height: fit-content;
+    width: fit-content;
     justify-content: end;
     align-items: center;
+    padding: 25px;
+    border: 1px solid grey;
+    border-radius: 3%;
+    box-shadow: 3px 2px 1px rgba(0, 0, 0, 0.048);
+    background-color: #d3def6d3;
 }
 
+.resetInput,
+.loginInput,
 .registerInput {
     margin-bottom: 10px;
+    background-color: #e7eaf0c4;
 }
 
 button {

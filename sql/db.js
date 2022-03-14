@@ -43,6 +43,19 @@ module.exports.updateImage = function (email, picURL) {
     );
 };
 
+module.exports.updateBio = function (id, newBio) {
+    return db.query(
+        `
+    
+        UPDATE users 
+        SET bio = $2
+        WHERE id =  $1
+    
+    `,
+        [id, newBio]
+    );
+};
+
 module.exports.getCredentialsByEmail = function (email) {
     return db.query(
         `

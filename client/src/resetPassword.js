@@ -104,6 +104,10 @@ export default class ResetPassword extends Component {
                             >
                                 Get Code
                             </Button>
+                            <div className="alreadyMember">
+                                Just remembered your password? Click{" "}
+                                <Link to="/login">here</Link> to log in.
+                            </div>
                         </ThemeProvider>
                     </form>
                 </div>

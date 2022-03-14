@@ -1,11 +1,10 @@
 import { Component } from "react";
 import Logo from "./logo.js";
 import ProfilePic from "./profilePic.js";
+import Profile from "./profile.js";
 import Uploader from "./uploader.js";
-import Button from "@mui/material/Button";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { blueGrey } from "@mui/material/colors";
-import { Link } from "react-router-dom";
 
 let setTheme = createTheme({
     palette: {
@@ -23,29 +22,48 @@ export default class App extends Component {
         super();
         this.toggleUploader = this.toggleUploader.bind(this);
         this.updatePicState = this.updatePicState.bind(this);
+        this.updateBioState = this.updateBioState.bind(this);
 
         this.state = {
             first: "",
             last: "",
             email: "",
+            bio: "",
+            bioAdd: false,
+            bioEdit: false,
             profilePic: "",
             uploaderVisible: false,
+            loaded: false,
         };
     }
     updatePicState(pic) {
         this.setState({ profilePic: pic });
     }
+    updateBioState(bio) {
+        this.setState({ bio: bio });
+    }
     componentDidMount() {
         fetch("/user")
             .then((resp) => resp.json())
             .then((data) => {
-                console.log(data);
+                if (!data.rows[0].bio) {
+                    this.setState({ bioAdd: true });
+                } else {
+                    this.setState({ bioEdit: true });
+                }
                 this.setState({
                     profilePic: data.rows[0].profile_pic,
                     first: data.rows[0].firstname,
                     last: data.rows[0].lastname,
+                    bio: data.rows[0].bio,
                     email: data.rows[0].email,
+                    loaded: true,
                 });
+                if (!data.rows[0].profile_pic) {
+                    this.setState({
+                        profilePic: "../avatar.png",
+                    });
+                }
             });
     }
     toggleUploader() {
@@ -55,45 +73,50 @@ export default class App extends Component {
             this.setState({ uploaderVisible: false });
         }
     }
-    logout(e) {
-        e.target.preventDefault();
-    }
     render() {
         return (
             <ThemeProvider theme={setTheme}>
-                <div className="app">
-                    <Logo></Logo>
-                    <a href="/logout">
-                        <Button
-                            sx={{
-                                width: "35px",
-                                fontSize: "8px",
-                                height: "25px",
-                                mt: "15px",
-                                mb: "5px",
-                                bottom: "6px",
-                            }}
-                            variant="contained"
-                            onClick={this.logout}
-                        >
-                            Logout
-                        </Button>
-                    </a>
+                {this.state.loaded && (
+                    <div className="app">
+                        <div className="appHeaderContainer">
+                            <header className="appHeader">
+                                <Logo></Logo>
+                                <div className="profilePicContainerProfile">
+                                    <ProfilePic
+                                        profilePicSmall={true}
+                                        profilePic={this.state.profilePic}
+                                        first={this.state.first}
+                                        last={this.state.last}
+                                        bio={this.state.bio}
+                                        updatePicState={this.updatePicState}
+                                        toggleUploader={this.toggleUploader}
+                                    ></ProfilePic>
+                                </div>
+                            </header>
+                        </div>
 
-                    <ProfilePic
-                        profilePic={this.state.profilePic}
-                        first={this.state.first}
-                        last={this.state.last}
-                        updatePicState={this.updatePicState}
-                        toggleUploader={this.toggleUploader}
-                    ></ProfilePic>
-                    {this.state.uploaderVisible && (
-                        <Uploader
-                            toggleUploader={this.toggleUploader}
-                            updatePicState={this.updatePicState}
-                        ></Uploader>
-                    )}
-                </div>
+                        <div className="profileContainer">
+                            <Profile
+                                profilePic={this.state.profilePic}
+                                first={this.state.first}
+                                last={this.state.last}
+                                bio={this.state.bio}
+                                bioAdd={this.state.bioAdd}
+                                bioEdit={this.state.bioEdit}
+                                updatePicState={this.updatePicState}
+                                updateBioState={this.updateBioState}
+                                toggleUploader={this.toggleUploader}
+                            ></Profile>
+                        </div>
+
+                        {this.state.uploaderVisible && (
+                            <Uploader
+                                toggleUploader={this.toggleUploader}
+                                updatePicState={this.updatePicState}
+                            ></Uploader>
+                        )}
+                    </div>
+                )}
             </ThemeProvider>
         );
     }

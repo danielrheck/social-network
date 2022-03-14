@@ -28,7 +28,6 @@ export default class Uploader extends Component {
         super(props);
         this.inputUpdate = this.inputUpdate.bind(this);
         this.inputSubmit = this.inputSubmit.bind(this);
-        this.selectFile = this.selectFile.bind(this);
         this.handlePicUpdate = this.handlePicUpdate.bind(this);
         this.fileInput = React.createRef();
         this.state = {};
@@ -36,9 +35,7 @@ export default class Uploader extends Component {
     inputUpdate({ target }) {
         this.setState({ [target.name]: target.value });
     }
-    selectFile({ target }) {
-        this.setState({ file: target.files[0] });
-    }
+
     handlePicUpdate(newPic) {
         this.props.updatePicState(newPic);
     }
@@ -91,7 +88,6 @@ export default class Uploader extends Component {
                                 ref={this.fileInput}
                                 key="imagefile"
                                 name="imageFile"
-                                onChange={this.selectFile}
                             />
                             <IconButton
                                 size="large"
