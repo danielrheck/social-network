@@ -91,6 +91,30 @@ module.exports.addResetCode = function (email, code) {
     );
 };
 
+module.exports.getLastThree = function () {
+    return db.query(`
+    
+        SELECT * FROM users
+        ORDER BY id DESC
+        LIMIT 3
+
+    `);
+};
+
+module.exports.findPeople = function (search) {
+    return db.query(
+        `
+    
+        SELECT * from users
+        WHERE firstname ILIKE $1
+        OR lastname ILIKE $1
+        ORDER BY id DESC
+    
+    `,
+        ["%" + search + "%"]
+    );
+};
+
 module.exports.getResetCode = function (email) {
     return db.query(
         `

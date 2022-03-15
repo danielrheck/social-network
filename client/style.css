@@ -109,6 +109,54 @@ main {
     font-size: 12px;
     padding: 5px;
 }
+.searchAndResultsContainer {
+    justify-self: flex-start;
+    align-self: flex-start;
+    height: 600px;
+    margin-left: 40px;
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border: 2px solid grey;
+    overflow-y: scroll;
+}
+
+.resultItemPic {
+    object-fit: cover;
+    border-radius: 50%;
+    width: 95px;
+    height: 120px;
+    margin-right: 20px;
+}
+
+.searchInput {
+    position: relative;
+    left: 50px;
+    margin-bottom: 30px;
+}
+
+.resultsContainer {
+    min-width: 275px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.resultItem {
+    display: flex;
+    width: ;
+    padding-bottom: 15px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.resultItemPic {
+    width: 100px;
+}
+
+.fullName {
+    font-size: 20px;
+}
 
 .bioText {
     height: 134px;

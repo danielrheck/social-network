@@ -16,6 +16,8 @@ const {
     getDataByUserId,
     updateImage,
     updateBio,
+    findPeople,
+    getLastThree,
 } = require("../sql/db");
 const { sendEmail } = require("./aws_ses");
 const cookieSession = require("cookie-session");
@@ -84,6 +86,27 @@ app.get("/user", (req, res) => {
             res.json({ success: false });
         }
     });
+});
+
+app.get("/findPeople/search", (req, res) => {
+    findPeople(req.query.search)
+        .then(({ rows }) => {
+            res.json({ success: true, rows: rows });
+        })
+        .catch((e) => {
+            console.log("Error searching:  ", e);
+            res.json({ success: false });
+        });
+});
+
+app.get("/findPeople/lastThree", (req, res) => {
+    getLastThree()
+        .then(({ rows }) => {
+            res.json({ success: true, rows: rows });
+        })
+        .catch(() => {
+            res.json({ success: false });
+        });
 });
 
 app.get("/logout", (req, res) => {

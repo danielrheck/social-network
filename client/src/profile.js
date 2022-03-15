@@ -1,3 +1,4 @@
+import { BrowserRouter, Route, Link } from "react-router-dom";
 import { Component } from "react";
 import ProfilePic from "./profilePic.js";
 import BioEditor from "./bioEditor";

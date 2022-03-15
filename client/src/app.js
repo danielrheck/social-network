@@ -1,7 +1,9 @@
+import { BrowserRouter, Route, Link } from "react-router-dom";
 import { Component } from "react";
 import Logo from "./logo.js";
 import ProfilePic from "./profilePic.js";
 import Profile from "./profile.js";
+import FindPeople from "./findPeople.js";
 import Uploader from "./uploader.js";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { blueGrey } from "@mui/material/colors";
@@ -95,26 +97,33 @@ export default class App extends Component {
                             </header>
                         </div>
 
-                        <div className="profileContainer">
-                            <Profile
-                                profilePic={this.state.profilePic}
-                                first={this.state.first}
-                                last={this.state.last}
-                                bio={this.state.bio}
-                                bioAdd={this.state.bioAdd}
-                                bioEdit={this.state.bioEdit}
-                                updatePicState={this.updatePicState}
-                                updateBioState={this.updateBioState}
-                                toggleUploader={this.toggleUploader}
-                            ></Profile>
-                        </div>
+                        <BrowserRouter>
+                            <Route exact path="/">
+                                <div className="profileContainer">
+                                    <Profile
+                                        profilePic={this.state.profilePic}
+                                        first={this.state.first}
+                                        last={this.state.last}
+                                        bio={this.state.bio}
+                                        bioAdd={this.state.bioAdd}
+                                        bioEdit={this.state.bioEdit}
+                                        updatePicState={this.updatePicState}
+                                        updateBioState={this.updateBioState}
+                                        toggleUploader={this.toggleUploader}
+                                    ></Profile>
+                                </div>
 
-                        {this.state.uploaderVisible && (
-                            <Uploader
-                                toggleUploader={this.toggleUploader}
-                                updatePicState={this.updatePicState}
-                            ></Uploader>
-                        )}
+                                {this.state.uploaderVisible && (
+                                    <Uploader
+                                        toggleUploader={this.toggleUploader}
+                                        updatePicState={this.updatePicState}
+                                    ></Uploader>
+                                )}
+                            </Route>
+                            <Route path="/findPeople">
+                                <FindPeople></FindPeople>
+                            </Route>
+                        </BrowserRouter>
                     </div>
                 )}
             </ThemeProvider>
