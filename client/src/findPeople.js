@@ -6,7 +6,6 @@ export default function FindPeople() {
     const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
-        console.log("Fetch");
         fetch("/findPeople/lastThree")
             .then((resp) => resp.json())
             .then((data) => {

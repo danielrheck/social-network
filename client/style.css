@@ -62,8 +62,10 @@ main {
     position: absolute;
     top: 0px;
     width: 100vw;
-    height: 90px;
-    background-color: rgb(242, 250, 255);
+    height: 85px;
+    background-color: rgb(211, 226, 255);
+    border-bottom: 2px solid rgba(0, 0, 255, 0.13);
+    border-top: 2px solid rgba(0, 0, 255, 0.13);
 }
 
 .appHeader {
@@ -87,7 +89,7 @@ main {
 }
 
 .profileContainer {
-    background-color: rgb(224, 235, 245);
+    background-color: rgb(211, 226, 255);
     display: flex;
     height: 240px;
     width: 650px;
@@ -96,6 +98,7 @@ main {
     border-radius: 2%;
     padding: 15px;
     border: 1px solid black;
+    box-shadow: 3px 2px 2px 1px rgba(0, 0, 0, 0.356);
 }
 
 .editIcon {
@@ -144,7 +147,6 @@ main {
 
 .resultItem {
     display: flex;
-    width: ;
     padding-bottom: 15px;
     align-items: center;
     justify-content: space-between;
@@ -166,7 +168,7 @@ main {
     padding: 8px;
     padding-left: 10px;
     padding-right: 10px;
-    background-color: rgb(242, 250, 255);
+    background-color: rgb(211, 226, 255);
 }
 
 .editAddInputAndButton {
@@ -206,6 +208,7 @@ main {
 .profilePicSmall {
     width: 60px;
     height: 60px;
+    border: 2px solid rgba(0, 0, 0, 0.596);
     border-radius: 50%;
 }
 

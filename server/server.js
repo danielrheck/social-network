@@ -114,6 +114,22 @@ app.get("/logout", (req, res) => {
     res.redirect("/");
 });
 
+app.get("/getUserProfileByID/:id", (req, res) => {
+    console.log();
+    getDataByUserId(req.params.id)
+        .then(({ rows }) => {
+            res.json({
+                loggedUserId: req.session.userId,
+                success: true,
+                rows: rows,
+            });
+        })
+        .catch((e) => {
+            console.log("Error getting user info from DB:  ", e);
+            res.json({ success: false });
+        });
+});
+
 app.post("/users/login.json", (req, res) => {
     getCredentialsByEmail(req.body.email)
         .then(({ rows }) => {

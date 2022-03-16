@@ -1,8 +1,9 @@
-import { BrowserRouter, Route, Link } from "react-router-dom";
+import { BrowserRouter, Route, Link, useHistory } from "react-router-dom";
 import { Component } from "react";
 import Logo from "./logo.js";
 import ProfilePic from "./profilePic.js";
 import Profile from "./profile.js";
+import OtherProfile from "./otherProfile.js";
 import FindPeople from "./findPeople.js";
 import Uploader from "./uploader.js";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -45,6 +46,7 @@ export default class App extends Component {
         this.setState({ bio: bio });
     }
     componentDidMount() {
+        //
         fetch("/user")
             .then((resp) => resp.json())
             .then((data) => {
@@ -98,6 +100,12 @@ export default class App extends Component {
                         </div>
 
                         <BrowserRouter>
+                            <Route path="/findPeople">
+                                <FindPeople></FindPeople>
+                            </Route>
+                            <Route path="/userprofile/:id">
+                                <OtherProfile></OtherProfile>
+                            </Route>
                             <Route exact path="/">
                                 <div className="profileContainer">
                                     <Profile
@@ -112,17 +120,13 @@ export default class App extends Component {
                                         toggleUploader={this.toggleUploader}
                                     ></Profile>
                                 </div>
-
-                                {this.state.uploaderVisible && (
-                                    <Uploader
-                                        toggleUploader={this.toggleUploader}
-                                        updatePicState={this.updatePicState}
-                                    ></Uploader>
-                                )}
-                            </Route>
-                            <Route path="/findPeople">
-                                <FindPeople></FindPeople>
-                            </Route>
+                            </Route>{" "}
+                            {this.state.uploaderVisible && (
+                                <Uploader
+                                    toggleUploader={this.toggleUploader}
+                                    updatePicState={this.updatePicState}
+                                ></Uploader>
+                            )}
                         </BrowserRouter>
                     </div>
                 )}
