@@ -40,6 +40,7 @@ export default class Login extends Component {
             .then((resp) => resp.json())
             .then((data) => {
                 if (data.success) {
+                    history.pushState(null, null, "/");
                     location.reload();
                 } else {
                     this.setState({ error: true }).then(() => {});

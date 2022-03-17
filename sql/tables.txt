@@ -22,3 +22,15 @@ CREATE TABLE reset_codes (
     code            VARCHAR(255) NOT NULL,
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+
+DROP TABLE IF EXISTS friend_requests;
+
+CREATE TABLE friend_requests (
+    id SERIAL       PRIMARY KEY,
+    sender_id       INTEGER NOT NULL REFERENCES users(id),
+    recipient_id    INTEGER NOT NULL REFERENCES users(id),
+    accepted        BOOLEAN
+);
+
+CREATE UNIQUE INDEX ON friend_requests (least(sender_id, recipient_id), greatest(sender_id, recipient_id));

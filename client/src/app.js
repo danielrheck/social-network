@@ -28,6 +28,7 @@ export default class App extends Component {
         this.updateBioState = this.updateBioState.bind(this);
 
         this.state = {
+            loggedUser: "",
             first: "",
             last: "",
             email: "",
@@ -103,7 +104,7 @@ export default class App extends Component {
                             <Route path="/findPeople">
                                 <FindPeople></FindPeople>
                             </Route>
-                            <Route path="/userprofile/:id">
+                            <Route path="/userprofile/:otherUserId">
                                 <OtherProfile></OtherProfile>
                             </Route>
                             <Route exact path="/">

@@ -18,6 +18,10 @@ const {
     updateBio,
     findPeople,
     getLastThree,
+    getFriendshipRequests,
+    addFriendshipRequests,
+    acceptFriendship,
+    deleteFriendship,
 } = require("../sql/db");
 const { sendEmail } = require("./aws_ses");
 const cookieSession = require("cookie-session");
@@ -81,7 +85,11 @@ app.get("/users/id.json", (req, res) => {
 app.get("/user", (req, res) => {
     getDataByUserId(req.session.userId).then(({ rows }) => {
         if (rows[0]) {
-            res.json({ success: true, rows: rows });
+            res.json({
+                success: true,
+                rows: rows,
+                loggedUserId: req.session.userId,
+            });
         } else {
             res.json({ success: false });
         }
@@ -115,7 +123,6 @@ app.get("/logout", (req, res) => {
 });
 
 app.get("/getUserProfileByID/:id", (req, res) => {
-    console.log();
     getDataByUserId(req.params.id)
         .then(({ rows }) => {
             res.json({
@@ -128,6 +135,70 @@ app.get("/getUserProfileByID/:id", (req, res) => {
             console.log("Error getting user info from DB:  ", e);
             res.json({ success: false });
         });
+});
+
+app.get("/getFriendshipStatus", (req, res) => {
+    getFriendshipRequests(req.session.userId, req.query.otherUserId).then(
+        ({ rows }) => {
+            if (!rows[0]) {
+                // no request yet
+                // ADD_BUTTON
+                res.json({ buttonState: "addFriend" });
+            } else if (
+                rows[0].sender_id == req.session.userId &&
+                rows[0].accepted == false
+            ) {
+                res.json({ buttonState: "waitResponse" });
+                // logged user requested friendship
+                // WAITING_FOR_ANSWER BUTTON
+                // MAYBE CANCEL_BUTTON
+            } else if (rows[0].accepted == true) {
+                res.json({ buttonState: "unfriend" });
+                // users are friends already
+                // UNFRIEND_BUTTON
+            } else if (
+                rows[0].recipient_id == req.session.userId &&
+                rows[0].accepted == false
+            ) {
+                res.json({ buttonState: "acceptFriend" });
+                // other user requested friendship
+                // ACCEPT BUTTON
+                // MAYBE DELETE_BUTTON
+            }
+        }
+    );
+});
+
+app.post("/changeFriendsStatus", (req, res) => {
+    console.log(req.body.buttonState);
+    if (req.body.buttonState == "addFriend") {
+        addFriendshipRequests(req.session.userId, req.body.otherUserId)
+            .then(() => {
+                res.json({ success: true, buttonState: "waitResponse" });
+            })
+            .catch((e) => {
+                console.log("Error adding friendship request:  ", e);
+                res.json({ success: false });
+            });
+        // INSERT NEW ROW WITH SENDER_ID = REQ.SESSION.USERID RECIPIENT_ID = PASSED_ID AND ACCEPTED = FALSE
+    } else if (req.body.buttonState == "acceptFriend") {
+        acceptFriendship(req.body.otherUserId, req.session.userId).then(() => {
+            res.json({ success: true, buttonState: "unfriend" });
+        });
+        // UPDATE ROW TO ACCEPTED = TRUE
+    } else if (req.body.buttonState == "waitResponse") {
+        // DO NOTHING
+        res.json({ buttonState: "waitResponse" });
+    } else if (req.body.buttonState == "unfriend") {
+        // DELETE ROW
+        deleteFriendship(req.session.userId, req.body.otherUserId)
+            .then(() => {
+                res.json({ success: true, buttonState: "addFriend" });
+            })
+            .catch((e) => {
+                console.log("Error deleting friendship  ", e);
+            });
+    }
 });
 
 app.post("/users/login.json", (req, res) => {
@@ -183,7 +254,6 @@ app.post("/reset/sendCode", (req, res) => {
 });
 
 app.post("/bio/update", (req, res) => {
-    console.log(req.session.userId, req.body.newBio);
     updateBio(req.session.userId, req.body.newBio)
         .then(() => {
             res.json({ success: true });
@@ -195,7 +265,6 @@ app.post("/bio/update", (req, res) => {
 });
 
 app.post("/pic/upload", uploader.single("file"), s3.upload, (req, res) => {
-    // console.log("Gets here!");
     getDataByUserId(req.session.userId).then(({ rows }) => {
         updateImage(
             rows[0].email,

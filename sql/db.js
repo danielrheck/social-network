@@ -142,3 +142,74 @@ module.exports.updatePassword = function (email, password) {
         [email, password]
     );
 };
+
+module.exports.getFriendshipRequests = function (
+    logged_user_id,
+    other_profile_id
+) {
+    return db.query(
+        `
+    
+        SELECT * FROM friend_requests
+  WHERE (recipient_id = $1 AND sender_id = $2)
+  OR (recipient_id = $2 AND sender_id = $1)
+    
+    `,
+        [logged_user_id, other_profile_id]
+    );
+};
+
+module.exports.addFriendshipRequests = function (
+    logged_user_id,
+    other_profile_id
+) {
+    return db.query(
+        `
+    
+        INSERT INTO friend_requests (sender_id, recipient_id, accepted)
+        VALUES ($1, $2, false)
+    
+    `,
+        [logged_user_id, other_profile_id]
+    );
+};
+
+module.exports.acceptFriendship = function (senders_id, recipient_id) {
+    return db.query(
+        `
+    
+        UPDATE friend_requests
+        SET accepted = true
+        WHERE sender_id = $1 AND recipient_id = $2
+
+    `,
+        [senders_id, recipient_id]
+    );
+};
+
+module.exports.deleteFriendship = function (logged_user_id, other_user_id) {
+    return db.query(
+        `
+    
+        DELETE FROM friend_requests
+        WHERE sender_id = $1 AND recipient_id = $2
+
+    `,
+        [logged_user_id, other_user_id]
+    );
+};
+
+let acceptFriendship = function (senders_id, recipient_id) {
+    return db.query(
+        `
+    
+        UPDATE friend_requests
+        SET accepted = true
+        WHERE sender_id = $1 AND recipient_id = $2
+
+    `,
+        [senders_id, recipient_id]
+    );
+};
+
+acceptFriendship(1, 54);
