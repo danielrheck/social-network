@@ -193,23 +193,24 @@ module.exports.deleteFriendship = function (logged_user_id, other_user_id) {
     
         DELETE FROM friend_requests
         WHERE sender_id = $1 AND recipient_id = $2
+        OR sender_id = $2 AND recipient_id = $1
 
     `,
         [logged_user_id, other_user_id]
     );
 };
 
-let acceptFriendship = function (senders_id, recipient_id) {
-    return db.query(
-        `
-    
-        UPDATE friend_requests
-        SET accepted = true
-        WHERE sender_id = $1 AND recipient_id = $2
+// let acceptFriendship = function (senders_id, recipient_id) {
+//     return db.query(
+//         `
 
-    `,
-        [senders_id, recipient_id]
-    );
-};
+//         UPDATE friend_requests
+//         SET accepted = true
+//         WHERE sender_id = $1 AND recipient_id = $2
 
-acceptFriendship(1, 54);
+//     `,
+//         [senders_id, recipient_id]
+//     );
+// };
+
+// acceptFriendship(1, 54);
