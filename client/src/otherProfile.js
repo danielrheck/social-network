@@ -1,7 +1,8 @@
 import { useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
-import AddFriend from "../addFriend";
+import AddFriend from "./addFriend";
+import Paper from "@mui/material/Paper";
 
 export default function OtherProfile() {
     const history = useHistory();
@@ -42,14 +43,23 @@ export default function OtherProfile() {
     return (
         <>
             {error && <div>DEU RUIM!</div>}
-            <div>{firstname}</div>
-            <div>{lastname}</div>
-            <div>{bio}</div>
-            <div>{picUrl}</div>
-            <AddFriend
-                otherUserId={otherUserId}
-                loggedUserId={loggedUserId}
-            ></AddFriend>
+            <Paper
+                className="Papier"
+                elevation={5}
+                sx={{ width: "500px", p: 3, bgcolor: "#d2edff6b" }}
+            >
+                <div className="otherProfileContainer">
+                    <img id="otherProfilePic" src={picUrl}></img>
+                    <div className="otherProfileRow">
+                        <div className="otherProfileName">
+                            {firstname} {lastname}
+                        </div>
+                        <div></div>
+                        <div>{bio}</div>
+                    </div>
+                    <AddFriend otherUserId={otherUserId}></AddFriend>
+                </div>
+            </Paper>
         </>
     );
 }

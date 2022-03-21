@@ -141,36 +141,25 @@ app.get("/getFriendshipStatus", (req, res) => {
     getFriendshipRequests(req.session.userId, req.query.otherUserId).then(
         ({ rows }) => {
             if (!rows[0]) {
-                // no request yet
-                // ADD_BUTTON
                 res.json({ buttonState: "addFriend" });
             } else if (
                 rows[0].sender_id == req.session.userId &&
                 rows[0].accepted == false
             ) {
                 res.json({ buttonState: "waitResponse" });
-                // logged user requested friendship
-                // WAITING_FOR_ANSWER BUTTON
-                // MAYBE CANCEL_BUTTON
             } else if (rows[0].accepted == true) {
                 res.json({ buttonState: "unfriend" });
-                // users are friends already
-                // UNFRIEND_BUTTON
             } else if (
                 rows[0].recipient_id == req.session.userId &&
                 rows[0].accepted == false
             ) {
                 res.json({ buttonState: "acceptFriend" });
-                // other user requested friendship
-                // ACCEPT BUTTON
-                // MAYBE DELETE_BUTTON
             }
         }
     );
 });
 
 app.post("/changeFriendsStatus", (req, res) => {
-    console.log(req.body.buttonState);
     if (req.body.buttonState == "addFriend") {
         addFriendshipRequests(req.session.userId, req.body.otherUserId)
             .then(() => {
@@ -294,7 +283,6 @@ app.post("/users/checkCode", (req, res) => {
                         updatePassword(req.body.email, hashed)
                             .then(() => {
                                 res.json({ success: true });
-                                console.log("PASSWORD UPDATED SUCCESS!!!!!");
                             })
                             .catch((e) => {
                                 console.log("Error updating Password:  ", e);

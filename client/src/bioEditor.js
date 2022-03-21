@@ -80,6 +80,7 @@ export default class BioEditor extends Component {
                                         rows={"8"}
                                         cols={"48"}
                                         onChange={this.inputUpdate}
+                                        placeholder={this.props.bio}
                                     ></textarea>
 
                                     <Button

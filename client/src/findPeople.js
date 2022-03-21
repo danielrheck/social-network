@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import AddFriend from "./addFriend";
 
 export default function FindPeople() {
     const [results, setResults] = useState([]);
@@ -56,9 +57,15 @@ export default function FindPeople() {
                             className="resultItemPic"
                             src={item.profile_pic}
                         ></img>
-                        <div className="fullName">
-                            {item.firstname} {item.lastname}
-                        </div>
+                        <a
+                            className="profileLink"
+                            href={`/userprofile/${item.id}`}
+                        >
+                            <div className="fullName">
+                                {item.firstname} {item.lastname}
+                            </div>
+                        </a>
+                        <AddFriend otherUserId={item.id}></AddFriend>
                     </div>
                 ))}
             </div>

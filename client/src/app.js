@@ -8,6 +8,7 @@ import FindPeople from "./findPeople.js";
 import Uploader from "./uploader.js";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { blueGrey } from "@mui/material/colors";
+import Paper from "@mui/material/Paper";
 
 let setTheme = createTheme({
     palette: {
@@ -85,7 +86,10 @@ export default class App extends Component {
                     <div className="app">
                         <div className="appHeaderContainer">
                             <header className="appHeader">
-                                <Logo></Logo>
+                                <a href="/">
+                                    <Logo></Logo>
+                                </a>
+
                                 <div className="profilePicContainerProfile">
                                     <ProfilePic
                                         profilePicSmall={true}
@@ -108,7 +112,15 @@ export default class App extends Component {
                                 <OtherProfile></OtherProfile>
                             </Route>
                             <Route exact path="/">
-                                <div className="profileContainer">
+                                <Paper
+                                    className="profileContainer"
+                                    elevation={5}
+                                    sx={{
+                                        width: "610px",
+                                        p: 3,
+                                        bgcolor: "#d2edff6b",
+                                    }}
+                                >
                                     <Profile
                                         profilePic={this.state.profilePic}
                                         first={this.state.first}
@@ -120,7 +132,7 @@ export default class App extends Component {
                                         updateBioState={this.updateBioState}
                                         toggleUploader={this.toggleUploader}
                                     ></Profile>
-                                </div>
+                                </Paper>
                             </Route>{" "}
                             {this.state.uploaderVisible && (
                                 <Uploader
