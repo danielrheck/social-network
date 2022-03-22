@@ -6,6 +6,7 @@ import Profile from "./profile.js";
 import OtherProfile from "./otherProfile.js";
 import FindPeople from "./findPeople.js";
 import Uploader from "./uploader.js";
+import Friends from "./friends.js";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { blueGrey } from "@mui/material/colors";
 import Paper from "@mui/material/Paper";
@@ -107,6 +108,9 @@ export default class App extends Component {
                         <BrowserRouter>
                             <Route path="/findPeople">
                                 <FindPeople></FindPeople>
+                            </Route>
+                            <Route path="/friends">
+                                <Friends></Friends>
                             </Route>
                             <Route path="/userprofile/:otherUserId">
                                 <OtherProfile></OtherProfile>

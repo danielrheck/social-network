@@ -199,3 +199,35 @@ module.exports.deleteFriendship = function (logged_user_id, other_user_id) {
         [logged_user_id, other_user_id]
     );
 };
+
+module.exports.getAllFriendshipByUserId = function (user_id) {
+    return db.query(
+        `
+
+        SELECT users.id, firstname, lastname, profile_pic, accepted
+  FROM friend_requests
+  JOIN users
+  ON (accepted = false AND recipient_id = $1 AND sender_id = users.id)
+  OR (accepted = true AND recipient_id = $1 AND sender_id = users.id)
+  OR (accepted = true AND sender_id = $1 AND recipient_id = users.id)
+    
+    `,
+        [user_id]
+    );
+};
+
+// let addFriendshipRequests = function (logged_user_id, other_profile_id) {
+//     return db.query(
+//         `
+
+//         INSERT INTO friend_requests (sender_id, recipient_id, accepted)
+//         VALUES ($1, $2, false)
+
+//     `,
+//         [logged_user_id, other_profile_id]
+//     );
+// };
+
+// for (let i = 2; i < 8; i++) {
+//     addFriendshipRequests(i, 1);
+// }

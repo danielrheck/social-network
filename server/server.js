@@ -22,6 +22,7 @@ const {
     addFriendshipRequests,
     acceptFriendship,
     deleteFriendship,
+    getAllFriendshipByUserId,
 } = require("../sql/db");
 const { sendEmail } = require("./aws_ses");
 const cookieSession = require("cookie-session");
@@ -133,6 +134,17 @@ app.get("/getUserProfileByID/:id", (req, res) => {
         })
         .catch((e) => {
             console.log("Error getting user info from DB:  ", e);
+            res.json({ success: false });
+        });
+});
+
+app.get("/getAllFriendships", (req, res) => {
+    getAllFriendshipByUserId(req.session.userId)
+        .then(({ rows }) => {
+            res.json({ success: true, rows: rows });
+        })
+        .catch((e) => {
+            console.log("Error getting friends:  ", e);
             res.json({ success: false });
         });
 });
