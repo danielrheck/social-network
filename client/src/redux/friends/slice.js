@@ -14,7 +14,7 @@ export default function friendsReducer(friends = [], action) {
         });
         return updatedFriends;
     } else if (action.type === "friends-and-requests/delete") {
-        const updatedFriends = produce(friends, (draft) => {
+        let updatedFriends = produce(friends, (draft) => {
             for (let i = 0; i < draft.length; i++) {
                 if (draft[i].id == action.payload.id) {
                     draft.splice(i, 1);

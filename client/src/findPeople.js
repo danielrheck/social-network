@@ -4,7 +4,6 @@ import AddFriend from "./addFriend";
 export default function FindPeople() {
     const [results, setResults] = useState([]);
     const [search, setSearch] = useState([]);
-    const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
         fetch("/findPeople/lastThree")
@@ -12,7 +11,6 @@ export default function FindPeople() {
             .then((data) => {
                 if (data.success) {
                     setResults(data.rows);
-                    setLoaded(true);
                 }
             })
             .catch((e) => {
@@ -22,21 +20,20 @@ export default function FindPeople() {
 
     useEffect(() => {
         let abort;
-        if (loaded) {
-            fetch("/findPeople/search/?search=" + search)
-                .then((resp) => resp.json())
-                .then((data) => {
-                    if (data.success) {
-                        console.log(data.rows);
-                        if (!abort) {
-                            setResults(data.rows);
-                        }
+
+        fetch("/findPeople/search/?search=" + search)
+            .then((resp) => resp.json())
+            .then((data) => {
+                if (data.success) {
+                    if (!abort) {
+                        setResults(data.rows);
                     }
-                })
-                .catch((e) => {
-                    console.log("Error fetching last users:  ", e);
-                });
-        }
+                }
+            })
+            .catch((e) => {
+                console.log("Error fetching last users:  ", e);
+            });
+
         return () => {
             abort = true;
         };

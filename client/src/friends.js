@@ -86,10 +86,12 @@ export default function Friends() {
                                 key={idx}
                             >
                                 <div className="friendItem">
-                                    <img
-                                        className="profilePicFriendsPage"
-                                        src={item.profile_pic}
-                                    ></img>
+                                    <div className="profilePicFriendsPageContainer">
+                                        <img
+                                            className="profilePicFriendsPage"
+                                            src={item.profile_pic}
+                                        ></img>
+                                    </div>
                                     <img
                                         className="cancelIcon"
                                         src="./reject.png"

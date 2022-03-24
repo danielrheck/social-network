@@ -34,3 +34,12 @@ CREATE TABLE friend_requests (
 );
 
 CREATE UNIQUE INDEX ON friend_requests (least(sender_id, recipient_id), greatest(sender_id, recipient_id));
+
+DROP TABLE IF EXISTS general_chat;
+
+CREATE TABLE general_chat (
+    id SERIAL       PRIMARY KEY,
+    sender_id       INTEGER NOT NULL REFERENCES users(id),
+    message         VARCHAR NOT NULL,
+    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

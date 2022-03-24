@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Link, useHistory } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 import { Component } from "react";
 import Logo from "./logo.js";
 import ProfilePic from "./profilePic.js";
@@ -7,6 +7,7 @@ import OtherProfile from "./otherProfile.js";
 import FindPeople from "./findPeople.js";
 import Uploader from "./uploader.js";
 import Friends from "./friends.js";
+import GeneralChat from "./generalChat.js";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { blueGrey } from "@mui/material/colors";
 import Paper from "@mui/material/Paper";
@@ -106,6 +107,9 @@ export default class App extends Component {
                         </div>
 
                         <BrowserRouter>
+                            <Route path="/generalChat">
+                                <GeneralChat></GeneralChat>
+                            </Route>
                             <Route path="/findPeople">
                                 <FindPeople></FindPeople>
                             </Route>

@@ -216,6 +216,79 @@ module.exports.getAllFriendshipByUserId = function (user_id) {
     );
 };
 
+module.exports.addNewMessageToGeneralChat = function (sender_id, message) {
+    return db.query(
+        `
+        INSERT INTO general_chat
+        (sender_id, message)
+        VALUES($1, $2)
+        RETURNING created_at, id
+        
+        
+        `,
+        [sender_id, message]
+    );
+};
+
+module.exports.getLastTenMessagesFromGeneralChat = function () {
+    return db.query(`
+    
+        SELECT 
+            users.id as sender_id, 
+            users.firstname, 
+            users.lastname, 
+            users.profile_pic, 
+            general_chat.id as message_id,
+            general_chat.message, 
+            general_chat.created_at
+        FROM users
+        INNER JOIN general_chat
+        ON users.id = sender_id
+        ORDER BY general_chat.id DESC
+        LIMIT 10
+    
+    `);
+};
+
+// let getLastTenMessagesFromGeneralChat = function () {
+//     return db.query(`
+
+//         SELECT
+//             users.id as sender_id,
+//             users.firstname,
+//             users.lastname,
+//             users.profile_pic,
+//             general_chat.id as message_id,
+//             general_chat.message,
+//             general_chat.created_at
+//         FROM users
+//         INNER JOIN general_chat
+//         ON users.id = sender_id
+//         ORDER BY general_chat.id
+//         LIMIT 10
+
+//     `);
+// };
+
+// getLastTenMessagesFromGeneralChat().then(({ rows }) => {
+//     console.log(rows.length, rows);
+// });
+
+// let addNewMessageToGeneralChat = function (sender_id, message) {
+//     return db.query(
+//         `
+//         INSERT INTO general_chat
+//         (sender_id, message)
+//         VALUES($1, $2)
+//         RETURNING created_at, id
+
+//         `,
+//         [sender_id, message]
+//     );
+// };
+
+// addNewMessageToGeneralChat(1, "MENSAGEM NOVA 11!");
+
 // let addFriendshipRequests = function (logged_user_id, other_profile_id) {
 //     return db.query(
 //         `

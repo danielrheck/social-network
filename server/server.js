@@ -1,5 +1,10 @@
 const express = require("express");
 const app = express();
+const server = require("http").Server(app);
+const io = require("socket.io")(server, {
+    allowRequest: (req, callback) =>
+        callback(null, req.headers.referer.startsWith("http://localhost:3000")),
+});
 const multer = require("multer");
 const uidSafe = require("uid-safe");
 const compression = require("compression");
@@ -23,6 +28,8 @@ const {
     acceptFriendship,
     deleteFriendship,
     getAllFriendshipByUserId,
+    addNewMessageToGeneralChat,
+    getLastTenMessagesFromGeneralChat,
 } = require("../sql/db");
 const { sendEmail } = require("./aws_ses");
 const cookieSession = require("cookie-session");
@@ -31,14 +38,66 @@ const cryptoRandomString = require("crypto-random-string");
 
 app.use(compression());
 
-app.use(
-    cookieSession({
-        name: "session",
-        secret: secrets.COOKIE_SESSION_KEY,
-        maxAge: 24 * 60 * 60 * 1000,
-        sameSite: true,
-    })
-);
+const cookieSessionMiddleware = cookieSession({
+    name: "session",
+    secret: secrets.COOKIE_SESSION_KEY,
+    maxAge: 24 * 60 * 60 * 1000,
+    sameSite: true,
+});
+
+app.use(cookieSessionMiddleware);
+
+io.use(function (socket, next) {
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+});
+
+const connectedUsers = [];
+
+io.on("connection", (socket) => {
+    if (!socket.request.session.userId) {
+        return socket.disconnect(true);
+    }
+
+    const userId = socket.request.session.userId;
+
+    console.log("user connected:  ", userId);
+
+    connectedUsers.push({ socketId: socket.id, userId: userId });
+
+    getLastTenMessagesFromGeneralChat()
+        .then(({ rows }) => {
+            socket.emit("lastTenMessages", rows);
+        })
+        .catch((e) => {
+            console.log("Error fetching last 10 messages:  ", e);
+        });
+
+    socket.on("newMessage", (newMessage) => {
+        addNewMessageToGeneralChat(userId, newMessage)
+            .then(({ rows }) => {
+                const timestamp = rows[0].timestamp;
+                const messageId = rows[0].id;
+                getDataByUserId(userId)
+                    .then(({ rows }) => {
+                        io.emit("message", {
+                            message: newMessage,
+                            messageId: messageId,
+                            userId: userId,
+                            profilePic: rows[0].profile_pic,
+                            firstName: rows[0].firstname,
+                            lastName: rows[0].lastname,
+                            timestamp: timestamp,
+                        });
+                    })
+                    .catch((e) => {
+                        console.log("Error getting user info:  ", e);
+                    });
+            })
+            .catch((e) => {
+                console.log("Error inserting new message in DB:  ", e);
+            });
+    });
+});
 
 app.use(express.json());
 
@@ -322,6 +381,6 @@ app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });
 
-app.listen(process.env.PORT || 3001, function () {
+server.listen(process.env.PORT || 3001, function () {
     console.log("Listening on 3001/3000");
 });
