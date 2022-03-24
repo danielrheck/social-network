@@ -1,4 +1,4 @@
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Link } from "react-router-dom";
 import { Component } from "react";
 import Logo from "./logo.js";
 import ProfilePic from "./profilePic.js";
@@ -27,6 +27,7 @@ export default class App extends Component {
     constructor() {
         super();
         this.toggleUploader = this.toggleUploader.bind(this);
+        this.toggleGeneralChat = this.toggleGeneralChat.bind(this);
         this.updatePicState = this.updatePicState.bind(this);
         this.updateBioState = this.updateBioState.bind(this);
 
@@ -40,6 +41,7 @@ export default class App extends Component {
             bioEdit: false,
             profilePic: "",
             uploaderVisible: false,
+            generalChatVisible: false,
             loaded: false,
         };
     }
@@ -50,7 +52,6 @@ export default class App extends Component {
         this.setState({ bio: bio });
     }
     componentDidMount() {
-        //
         fetch("/user")
             .then((resp) => resp.json())
             .then((data) => {
@@ -81,35 +82,84 @@ export default class App extends Component {
             this.setState({ uploaderVisible: false });
         }
     }
+    toggleGeneralChat() {
+        if (this.state.generalChatVisible == false) {
+            this.setState({ generalChatVisible: true });
+        } else {
+            this.setState({ generalChatVisible: false });
+        }
+    }
     render() {
         return (
             <ThemeProvider theme={setTheme}>
                 {this.state.loaded && (
                     <div className="app">
-                        <div className="appHeaderContainer">
-                            <header className="appHeader">
-                                <a href="/">
-                                    <Logo></Logo>
-                                </a>
-
-                                <div className="profilePicContainerProfile">
-                                    <ProfilePic
-                                        profilePicSmall={true}
-                                        profilePic={this.state.profilePic}
-                                        first={this.state.first}
-                                        last={this.state.last}
-                                        bio={this.state.bio}
-                                        updatePicState={this.updatePicState}
-                                        toggleUploader={this.toggleUploader}
-                                    ></ProfilePic>
-                                </div>
-                            </header>
-                        </div>
-
                         <BrowserRouter>
-                            <Route path="/generalChat">
-                                <GeneralChat></GeneralChat>
-                            </Route>
+                            <div className="appHeaderContainer">
+                                <header className="appHeader">
+                                    <Link
+                                        to="/"
+                                        style={{ textDecoration: "none" }}
+                                    >
+                                        <Logo></Logo>
+                                    </Link>
+
+                                    <div className="headerLinks">
+                                        <Link
+                                            to="/findPeople"
+                                            style={{ textDecoration: "none" }}
+                                        >
+                                            <h1 className="headerLink">
+                                                Find People
+                                            </h1>
+                                        </Link>
+                                        <Link
+                                            to="/friends"
+                                            style={{ textDecoration: "none" }}
+                                        >
+                                            <h1 className="headerLink">
+                                                Friends
+                                            </h1>
+                                        </Link>
+                                    </div>
+
+                                    <div className="profilePicContainerProfile">
+                                        <ProfilePic
+                                            profilePicSmall={true}
+                                            profilePic={this.state.profilePic}
+                                            updatePicState={this.updatePicState}
+                                            toggleUploader={this.toggleUploader}
+                                        ></ProfilePic>
+                                        <a
+                                            className="logoutIconContainer"
+                                            href="/logout"
+                                        >
+                                            <img
+                                                className="logoutIcon"
+                                                src="../logout.png"
+                                            ></img>
+                                        </a>
+                                    </div>
+                                </header>
+                            </div>
+                            {/* <div className="navBar">
+                            <NavBar position="absolute"></NavBar>
+                        </div> */}
+                            {!this.state.generalChatVisible && (
+                                <div className="chatClosedHeader">
+                                    <div>General Chat</div>
+                                    <img
+                                        className="expandIcon"
+                                        src="../expand.png"
+                                        onClick={() => this.toggleGeneralChat()}
+                                    ></img>
+                                </div>
+                            )}
+                            {this.state.generalChatVisible && (
+                                <GeneralChat
+                                    toggleGeneralChat={this.toggleGeneralChat}
+                                ></GeneralChat>
+                            )}
                             <Route path="/findPeople">
                                 <FindPeople></FindPeople>
                             </Route>

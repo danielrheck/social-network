@@ -1,5 +1,4 @@
 import { Component } from "react";
-import Button from "@mui/material/Button";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { blueGrey } from "@mui/material/colors";
 
@@ -43,24 +42,7 @@ export default class ProfilePic extends Component {
                         onClick={this.props.toggleUploader}
                         onLoad={() => this.setState({ userImageLoaded: true })}
                     />
-                    <ThemeProvider theme={setTheme}>
-                        <a className="logoutButton" href="/logout">
-                            <Button
-                                sx={{
-                                    width: "35px",
-                                    fontSize: "11px",
-                                    height: "25px",
-                                    mt: "15px",
-                                    mb: "5px",
-                                    bottom: "6px",
-                                }}
-                                variant="contained"
-                                onClick={this.logout}
-                            >
-                                Logout
-                            </Button>
-                        </a>
-                    </ThemeProvider>
+                    <ThemeProvider theme={setTheme}></ThemeProvider>
                 </>
             );
         } else if (this.props.profilePicBig) {

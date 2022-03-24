@@ -60,9 +60,7 @@ io.on("connection", (socket) => {
 
     const userId = socket.request.session.userId;
 
-    console.log("user connected:  ", userId);
-
-    connectedUsers.push({ socketId: socket.id, userId: userId });
+    connectedUsers.push({ userId: userId, socketId: socket.id });
 
     getLastTenMessagesFromGeneralChat()
         .then(({ rows }) => {
@@ -75,18 +73,18 @@ io.on("connection", (socket) => {
     socket.on("newMessage", (newMessage) => {
         addNewMessageToGeneralChat(userId, newMessage)
             .then(({ rows }) => {
-                const timestamp = rows[0].timestamp;
+                const timestamp = rows[0].created_at;
                 const messageId = rows[0].id;
                 getDataByUserId(userId)
                     .then(({ rows }) => {
                         io.emit("message", {
                             message: newMessage,
-                            messageId: messageId,
-                            userId: userId,
-                            profilePic: rows[0].profile_pic,
-                            firstName: rows[0].firstname,
-                            lastName: rows[0].lastname,
-                            timestamp: timestamp,
+                            message_id: messageId,
+                            sender_id: userId,
+                            profile_pic: rows[0].profile_pic,
+                            firstname: rows[0].firstname,
+                            lastname: rows[0].lastname,
+                            created_at: timestamp,
                         });
                     })
                     .catch((e) => {

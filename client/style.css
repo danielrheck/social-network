@@ -62,10 +62,32 @@ main {
     position: absolute;
     top: 0px;
     width: 100vw;
-    height: 85px;
-    background-color: rgb(211, 226, 255);
-    border-bottom: 2px solid rgba(0, 0, 255, 0.13);
-    border-top: 2px solid rgba(0, 0, 255, 0.13);
+    height: 95px;
+    background-color: rgb(233, 241, 255);
+    border-bottom: 2px solid rgba(47, 47, 126, 0.13);
+    border-top: 2px solid rgba(47, 47, 126, 0.13);
+}
+
+.headerLinks {
+    position: relative;
+    right: 30vw;
+    display: flex;
+    flex-direction: row;
+    gap: 28px;
+    font-family: "Raleway", sans-serif;
+}
+
+.headerLink {
+    font-size: 22px;
+    cursor: pointer;
+    font-family: "Raleway", sans-serif;
+    color: #4b5266d3;
+    text-shadow: 1px 1px rgba(223, 223, 223, 0.507);
+}
+
+.logoutIcon {
+    width: 20px;
+    height: 20px;
 }
 
 .otherProfileContainer {
@@ -83,6 +105,12 @@ main {
     height: 140px;
     width: 160px;
     padding: 3px;
+}
+
+.navBar {
+    position: absolute;
+    top: 0;
+    width: 100vw;
 }
 
 .otherProfileName {
@@ -130,16 +158,34 @@ main {
     width: 92vw;
 }
 
-.logoutButton {
-    position: absolute;
-    top: 100px;
-    right: 20px;
+.profilePicContainerProfile {
+    display: flex;
+    position: relative;
+    left: 10px;
+    flex-direction: row;
+    gap: 16px;
+}
+
+.logoutIconContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logoutIcon {
+    position: relative;
+    left: 10px;
+    width: 20px;
+    height: 20px;
+    object-fit: scale-down;
 }
 
 .logo {
     width: 100px;
     height: 55px;
     cursor: pointer;
+    position: relative;
+    top: 5px;
 }
 
 .profileContainer {
@@ -282,16 +328,139 @@ main {
     cursor: pointer;
 }
 
+.chatClosedHeader {
+    display: flex;
+    flex-direction: row;
+    width: 320px;
+    height: 30px;
+    background-color: rgba(127, 197, 255, 0.205);
+    justify-content: center;
+    align-items: center;
+    gap: 55%;
+    border: 1px solid rgba(0, 0, 0, 0.246);
+    position: absolute;
+    bottom: 10px;
+    right: 50px;
+}
+
+.expandIcon,
+.minimizeIcon {
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+
 .profilePicFriendsPage {
     object-fit: cover;
     width: 150px;
     height: 100px;
 }
 
-/* .bioTextInput {
-    position: relative;
-    right: 160px;
-} */
+.chatContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(127, 197, 255, 0.205);
+    border: 1px solid rgba(0, 0, 0, 0.246);
+    position: absolute;
+    bottom: 10px;
+    right: 50px;
+}
+
+.chatHeader {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-top: 5px;
+}
+
+.messagesContainer {
+    display: flex;
+    flex-direction: column-reverse;
+    overflow-y: scroll;
+    height: 360px;
+    width: 350px;
+    padding: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.397);
+}
+
+.messageItem {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 22px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.chatProfilePic {
+    width: 45px;
+    height: 45px;
+    border: 1px solid black;
+    border-radius: 50%;
+}
+
+.profileAndName {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 8px;
+    margin-right: 5px;
+}
+
+.userFullName {
+    display: flex;
+    line-height: 20px;
+    flex-direction: row;
+    width: fit-content;
+    font-size: 14px;
+}
+
+.timestamp {
+    font-size: 12px;
+    justify-self: center;
+    text-align: center;
+}
+
+.messageText {
+    border: 1px solid rgba(0, 0, 0, 0.335);
+    background-color: aliceblue;
+    min-width: 200px;
+    max-width: 200px;
+    min-height: 160px;
+    word-wrap: break-word;
+    padding: 5px;
+    border-radius: 4px;
+    box-shadow: 1px 1px rgba(0, 0, 0, 0.102);
+}
+
+.messageInputContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 4px;
+}
+
+.messageInput {
+    width: 320px;
+}
+
+.sendIcon {
+    width: 16px;
+    cursor: pointer;
+}
 
 .profilePicContainer {
     display: flex;
@@ -353,10 +522,6 @@ main {
     height: 140px;
     border: 2px solid rgba(255, 255, 255, 0.438);
     box-shadow: 2px 1px rgba(0, 0, 0, 0.267);
-}
-
-.closeButtonBox {
-    /* background: white; */
 }
 
 .closeButton {
