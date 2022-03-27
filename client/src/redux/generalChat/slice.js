@@ -3,6 +3,7 @@ import { produce } from "immer";
 export default function generalChatReducer(messages = [], action) {
     if (action.type === "general-chat/fetchLastTenMessages") {
         let lastTenMessages = produce(messages, (draft) => {
+            draft = [];
             action.payload.messages.forEach((message) => {
                 draft.push(message);
             });

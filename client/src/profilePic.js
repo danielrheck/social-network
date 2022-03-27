@@ -63,7 +63,10 @@ export default class ProfilePic extends Component {
                                 this.setState({ userImageLoaded: true })
                             }
                         />
-                        <div className="helloUser">
+                        <div
+                            className="helloUser"
+                            onClick={this.props.toggleUploader}
+                        >
                             Hello, {this.props.first} {this.props.last}
                         </div>
                     </div>

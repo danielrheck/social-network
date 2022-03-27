@@ -16,7 +16,6 @@ export default function GeneralChat(props) {
     let newMessage = function () {
         if (message != "") {
             socket.emit("newMessage", message);
-            console.log(inputRef);
             inputRef.current.value = "";
             inputRef.current.focus();
         }

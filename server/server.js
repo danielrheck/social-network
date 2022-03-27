@@ -30,8 +30,11 @@ const {
     getAllFriendshipByUserId,
     addNewMessageToGeneralChat,
     getLastTenMessagesFromGeneralChat,
+    getAllImages,
+    deleteAccount,
 } = require("../sql/db");
 const { sendEmail } = require("./aws_ses");
+const { deletePicture } = require("./aws_s3");
 const cookieSession = require("cookie-session");
 const secrets = require("../secrets.json");
 const cryptoRandomString = require("crypto-random-string");
@@ -325,7 +328,7 @@ app.post("/bio/update", (req, res) => {
 app.post("/pic/upload", uploader.single("file"), s3.upload, (req, res) => {
     getDataByUserId(req.session.userId).then(({ rows }) => {
         updateImage(
-            rows[0].email,
+            rows[0].id,
             `https://${secrets.AWS_BUCKET_NAME}.s3.amazonaws.com/${req.file.filename}`
         )
             .then(({ rows }) => {
@@ -339,6 +342,32 @@ app.post("/pic/upload", uploader.single("file"), s3.upload, (req, res) => {
             })
             .catch((e) => {
                 console.log(e);
+            });
+    });
+});
+
+app.delete("/user/deleteAccount", (req, res) => {
+    getAllImages(req.session.userId).then(({ rows }) => {
+        for (let i = 0; i < rows.length; i++) {
+            let string = rows[i].picture.split("/");
+            let file = string[string.length - 1];
+            deletePicture(file);
+        }
+        deleteAccount(req.session.userId)
+            .then(() => {
+                req.session.userId = null;
+                res.json({ success: true });
+                getLastTenMessagesFromGeneralChat()
+                    .then(({ rows }) => {
+                        io.emit("lastTenMessages", rows);
+                    })
+                    .catch((e) => {
+                        console.log("Error fetching last 10 messages:  ", e);
+                    });
+            })
+            .catch((e) => {
+                console.log("Error deleting account from DB:  ", e);
+                res.json({ success: false });
             });
     });
 });

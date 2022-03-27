@@ -51,10 +51,24 @@ export default class App extends Component {
     updateBioState(bio) {
         this.setState({ bio: bio });
     }
+
+    deleteAccountHandle() {
+        fetch("/user/deleteAccount", { method: "DELETE" })
+            .then((resp) => resp.json())
+            .then((data) => {
+                if (data.success) {
+                    location.reload();
+                }
+            });
+    }
+
     componentDidMount() {
         fetch("/user")
             .then((resp) => resp.json())
             .then((data) => {
+                if (!data.rows) {
+                    location.assign("/logout");
+                }
                 if (!data.rows[0].bio) {
                     this.setState({ bioAdd: true });
                 } else {
@@ -67,12 +81,16 @@ export default class App extends Component {
                     bio: data.rows[0].bio,
                     email: data.rows[0].email,
                     loaded: true,
+                    deleteVisible: false,
                 });
                 if (!data.rows[0].profile_pic) {
                     this.setState({
                         profilePic: "../avatar.png",
                     });
                 }
+            })
+            .catch((e) => {
+                console.log("Error fetching data:  ", e);
             });
     }
     toggleUploader() {
@@ -82,6 +100,15 @@ export default class App extends Component {
             this.setState({ uploaderVisible: false });
         }
     }
+
+    toggleDeleteModal() {
+        if (this.state.deleteVisible == false) {
+            this.setState({ deleteVisible: true });
+        } else {
+            this.setState({ deleteVisible: false });
+        }
+    }
+
     toggleGeneralChat() {
         if (this.state.generalChatVisible == false) {
             this.setState({ generalChatVisible: true });
@@ -92,6 +119,31 @@ export default class App extends Component {
     render() {
         return (
             <ThemeProvider theme={setTheme}>
+                {this.state.deleteVisible && (
+                    <div className="deleteAccountModal">
+                        <div className="deleteAccountBox">
+                            <div className="deleteConfirmationText">
+                                Are you sure you want to permanently delete your
+                                account?
+                            </div>
+                            <div className="deleteConfirmationIcons">
+                                <img
+                                    className="deleteConfirmationIcon"
+                                    src="../back.png"
+                                    onClick={() => this.toggleDeleteModal()}
+                                ></img>
+                                <img
+                                    className="deleteConfirmationIcon"
+                                    src="../confirm-delete.png"
+                                    onClick={() => {
+                                        this.deleteAccountHandle();
+                                    }}
+                                ></img>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 {this.state.loaded && (
                     <div className="app">
                         <BrowserRouter>
@@ -130,15 +182,29 @@ export default class App extends Component {
                                             updatePicState={this.updatePicState}
                                             toggleUploader={this.toggleUploader}
                                         ></ProfilePic>
-                                        <a
-                                            className="logoutIconContainer"
-                                            href="/logout"
-                                        >
-                                            <img
-                                                className="logoutIcon"
-                                                src="../logout.png"
-                                            ></img>
-                                        </a>
+                                        <div className="logoutAndDelete">
+                                            <a
+                                                className="logoutIconContainer"
+                                                href="/logout"
+                                            >
+                                                <img
+                                                    className="logoutIcon"
+                                                    src="../logout.png"
+                                                    alt="Logout"
+                                                ></img>
+                                            </a>
+
+                                            <div className="deleteIconContainer">
+                                                <img
+                                                    className="deleteIcon"
+                                                    src="../delete-icon.png"
+                                                    alt="Delete Account"
+                                                    onClick={() =>
+                                                        this.toggleDeleteModal()
+                                                    }
+                                                ></img>
+                                            </div>
+                                        </div>
                                     </div>
                                 </header>
                             </div>

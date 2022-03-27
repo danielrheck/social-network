@@ -29,20 +29,6 @@ module.exports.addUser = function (firstname, lastname, email, password) {
     );
 };
 
-module.exports.updateImage = function (email, picURL) {
-    return db.query(
-        `
-    
-        UPDATE users 
-        SET profile_pic = $2
-        WHERE email =  $1
-        RETURNING *
-    
-    `,
-        [email, picURL]
-    );
-};
-
 module.exports.updateBio = function (id, newBio) {
     return db.query(
         `
@@ -304,3 +290,200 @@ module.exports.getLastTenMessagesFromGeneralChat = function () {
 // for (let i = 2; i < 8; i++) {
 //     addFriendshipRequests(i, 1);
 // }
+
+module.exports.updateImage = function (userId, picURL) {
+    return db
+        .query(
+            `
+    
+        INSERT INTO profile_pictures (user_id, picture) 
+        VALUES($1, $2)
+
+    
+    `,
+            [userId, picURL]
+        )
+        .then(() => {
+            return db.query(
+                `
+    
+        UPDATE users 
+        SET profile_pic = $2
+        WHERE id =  $1
+        RETURNING *
+    
+    `,
+                [userId, picURL]
+            );
+        });
+};
+
+module.exports.getAllImages = function (userId) {
+    return db.query(
+        `
+    
+        SELECT * from profile_pictures where user_id = $1
+
+    `,
+        [userId]
+    );
+};
+
+module.exports.deleteAccount = function (userId) {
+    return db
+        .query(
+            `
+    
+        DELETE FROM profile_pictures 
+        WHERE user_id = $1
+    
+    `,
+            [userId]
+        )
+        .then(() => {
+            return db
+                .query(
+                    `
+            
+                DELETE FROM friend_requests
+                WHERE sender_id = $1
+                OR recipient_id = $1
+            
+            
+            `,
+                    [userId]
+                )
+                .then(() => {
+                    return db
+                        .query(
+                            `
+                    
+                        DELETE FROM general_chat
+                        WHERE sender_id = $1
+                    
+                    `,
+                            [userId]
+                        )
+                        .then(() => {
+                            return db.query(
+                                `
+                            
+                                DELETE FROM users
+                                WHERE id = $1
+                            
+                            `,
+                                [userId]
+                            );
+                        });
+                });
+        });
+};
+
+// let updateImage = function (userId, picURL) {
+//     return db
+//         .query(
+//             `
+
+//         INSERT INTO profile_pictures (user_id, picture)
+//         VALUES($1, $2)
+
+//     `,
+//             [userId, picURL]
+//         )
+//         .then(() => {
+//             return db.query(
+//                 `
+
+//         UPDATE users
+//         SET profile_pic = $2
+//         WHERE id =  $1
+//         RETURNING *
+
+//     `,
+//                 [userId, picURL]
+//             );
+//         });
+// };
+
+// updateImage(1, "www.foto.com").then(({ rows }) => {
+//     console.log(rows);
+// });
+
+// let deleteAccount = function (userId) {
+//     return db
+//         .query(
+//             `
+
+//         DELETE FROM profile_pictures
+//         WHERE user_id = $1
+
+//     `,
+//             [userId]
+//         )
+//         .then(() => {
+//             return db.query(
+//                 `
+
+//         DELETE FROM users
+//         WHERE id = $1
+
+//     `,
+//                 [userId]
+//             );
+//         });
+// };
+
+// deleteAccount(182);
+
+// let getAllImages = function (userId) {
+//     return db.query(
+//         `
+
+//         SELECT * from profile_pictures where user_id = $1
+
+//     `,
+//         [userId]
+//     );
+// };
+
+// getAllImages(1).then(({ rows }) => console.log(rows));
+
+let deleteAccount = function (userId) {
+    return db
+        .query(
+            `
+    
+        DELETE FROM profile_pictures 
+        WHERE user_id = $1
+    
+    `,
+            [userId]
+        )
+        .then(() => {
+            return db
+                .query(
+                    `
+            
+                DELETE FROM friend_requests
+                WHERE sender_id = $1
+                OR recipient_id = $1
+            
+            
+            `,
+                    [userId]
+                )
+                .then(() => {
+                    return db.query(
+                        `
+    
+        DELETE FROM users
+        WHERE id = $1
+    
+    `,
+                        [userId]
+                    );
+                });
+        });
+};
+
+deleteAccount(2);

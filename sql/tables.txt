@@ -43,3 +43,12 @@ CREATE TABLE general_chat (
     message         VARCHAR NOT NULL,
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+DROP TABLE IF EXISTS profile_pic;
+
+CREATE TABLE profile_pictures (
+    id SERIAL       PRIMARY KEY,
+    user_id         INTEGER NOT NULL REFERENCES users(id),
+    picture         VARCHAR NOT NULL,
+    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

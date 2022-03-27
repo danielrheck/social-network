@@ -40,3 +40,15 @@ exports.upload = (req, res, next) => {
             return res.sendStatus(500);
         });
 };
+
+module.exports.deletePicture = function (file) {
+    let params = { Bucket: secrets.AWS_BUCKET_NAME, Key: file };
+    s3.deleteObject(params)
+        .promise()
+        .then(() => {
+            console.log("Pic Deleted:  ", file);
+        })
+        .catch((e) => {
+            console.log("Error deleting from AWS:  ", e);
+        });
+};
